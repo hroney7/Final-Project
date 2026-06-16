@@ -62,7 +62,7 @@
             background: #f8fafc;
             border: 1px solid #e2e8f0;
             border-radius: 6px;
-            min-height: 600px;
+            min-height: 500px;
         }
         .back-to-top {
             display: inline-block;
@@ -110,7 +110,7 @@
 
     <h2>Video Tutorial: How to String a Racket</h2>
     <div class="video-container">
-        <iframe src="https://www.youtube.com/embed/P8_9V_68Csc" title="How to String a Tennis Racquet" allowfullscreen></iframe>
+        <iframe src="https://www.youtube.com/embed/P8_9V_68Csc" title="How to String a Tennis Racquet - YouTube" allowfullscreen></iframe>
     </div>
 
     <h2 id="tableau-section">Live Tennis Analytics</h2>
@@ -118,7 +118,9 @@
 
     <div class="tableau-container">
         <div class="tableauPlaceholder" id="viz1718569000000" style="position: relative;">
-            <noscript><a href="#"><img alt="Dashboard" src="https://public.tableau.com/static/images/Te/Tennis_16117973719000/Dashboard/1_rss.png" style="border: none;" /></a></noscript>
+            <noscript>
+                <a href="#"><img alt="Dashboard" src="https://public.tableau.com/static/images/Te/Tennis_16117973719000/Dashboard/1_rss.png" style="border: none;" /></a>
+            </noscript>
             <object class="tableauViz" style="display:none;">
                 <param name="host_url" value="https%3A%2F%2Fpublic.tableau.com%2F" /> 
                 <param name="embed_code_version" value="3" /> 
@@ -139,15 +141,13 @@
             var divElement = document.getElementById('viz1718569000000');                    
             var vizElement = divElement.getElementsByTagName('object')[0];                    
             vizElement.style.width='100%';
-            vizElement.style.height='600px';                    
+            vizElement.style.height=(divElement.offsetWidth*0.75)+'px';                    
             var scriptElement = document.createElement('script');                    
             scriptElement.src = 'https://public.tableau.com/javascripts/api/viz_v1.js';                    
             divElement.parentNode.insertBefore(scriptElement, divElement);                
         </script>
     </div>
-
     <p><a href="#top" class="back-to-top">↑ Back to Top of Page</a></p>
 </div>
-
 </body>
 </html>
