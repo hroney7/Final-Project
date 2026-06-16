@@ -1,0 +1,59 @@
+/* Custom background color for the entire page */
+body {
+    background-color: #f7fafc;
+    font-family: 'Helvetica Neue', Arial, sans-serif; /* Explicit font family */
+    color: #2d3748; /* Explicit font color */
+    margin: 0;
+    padding: 20px;
+}
+
+/* Div 1 Styling: Header navigation block */
+.header-box {
+    background-color: #1a202c;
+    color: #ffffff;
+    padding: 30px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.nav-link {
+    color: #ccff00; /* Distinct highlight color */
+    text-decoration: none;
+    font-weight: bold;
+    padding: 0 10px;
+}
+
+.nav-link:hover {
+    text-decoration: underline;
+}
+
+/* Div 2 Styling: Main text content area */
+.content-box {
+    background-color: #ffffff;
+    padding: 25px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    margin-bottom: 20px;
+}
+
+/* Div 3 Styling: Tableau wrapper block */
+.tableau-box {
+    background-color: #edf2f7;
+    padding: 25px;
+    border-radius: 8px;
+    border-left: 6px solid #1a202c;
+}
+
+/* Video wrapper layout configuration */
+.video-container {
+    margin-top: 20px;
+    text-align: center;
+}
+
+/* Smooth jump navigation element styling */
+.back-to-top {
+    color: #2b6cb0;
+    text-decoration: none;
+    font-weight: bold;
+}

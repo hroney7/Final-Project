@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Custom Racket & String Tension Calculator</title>
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --accent-color: #ccff00; /* Tennis Ball Yellow */
+            --bg-color: #f4f7f6;
+            --card-bg: #ffffff;
+            --text-dark: #333333;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-dark);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .app-container {
+            background-color: var(--card-bg);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            max-width: 600px;
+            width: 100%;
+            border-top: 8px solid var(--primary-color);
+        }
+
+        h1 {
+            color: var(--primary-color);
+            text-align: center;
+            margin-bottom: 5px;
+            font-size: 1.8rem;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 25px;
+            font-size: 0.95rem;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--primary-color);
+        }
+
+        select, input[type="range"] {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            box-sizing: border-box;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+
+        select:focus {
+            border-color: var(--primary-color);
+            outline: none;
+        }
+
+        .slider-val {
+            text-align: right;
+            font-size: 0.9rem;
+            color: #555;
+            font-weight: bold;
+            margin-top: 5px;
+        }
+
+        button {
+            width: 100%;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 12px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.1s;
+        }
+
+        button:hover {
+            background-color: #1a252f;
+        }
+
+        button:active {
+            transform: scale(0.98);
+        }
+
+        /* Results Display Styling */
+        .results-card {
+            margin-top: 25px;
+            padding: 20px;
+            background-color: #f9fbf9;
+            border-left: 5px solid var(--accent-color);
+            border-radius: 6px;
+            display: none;
+        }
+
+        .results-card h2 {
+            margin-top: 0;
+            color: var(--primary-color);
+            font-size: 1.4rem;
+        }
+
+        .result-item {
+            margin-bottom: 12px;
+            font-size: 1.05rem;
+        }
+
+        .result-item strong {
+            color: #2c3e50;
+        }
+
+        .badge {
+            background-color: #e2f0d9;
+            color: #385723;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 0.85rem;
+            font-weight: bold;
+        }
+
+        .nav-back {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+            color: #777;
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+
+        .nav-back:hover {
+            text-decoration: underline;
+            color: var(--primary-color);
+        }
+    </style>
+</head>
+<body>
+
+<div class="app-container">
+    <h1>Stringing & Tension Advisor</h1>
+    <div class="subtitle">Precision calculation for your clients' tennis setups</div>
+
+    <div class="form-group">
+        <label for="playstyle">Primary Playstyle Focus</label>
+        <select id="playstyle">
+            <option value="power">Max Power & Depth</option>
+            <option value="control">Precision & Maximum Control</option>
+            <option value="spin">Heavy Topspin / Baseline Rally</option>
+            <option value="comfort">Arm Comfort & Shock Absorption</option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label for="skill">Player Level</label>
+        <select id="skill">
+            <option value="beginner">Beginner / Recreational</option>
+            <option value="intermediate">Intermediate (NTRP 3.0 - 4.0)</option>
+            <option value="advanced">Advanced / Competitive (NTRP 4.5+)</option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label for="headsize">Racket Head Size</label>
+        <select id="headsize">
+            <option value="95">Midsize (Under 97 sq in)</option>
+            <option value="100" selected>Midplus (98 - 102 sq in)</option>
+            <option value="105">Oversize (103+ sq in)</option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label for="stringPattern">String Pattern</label>
+        <select id="stringPattern">
+            <option value="open">Open (16x19) - More spin/power</option>
+            <option value="dense">Dense (18x20) - More control/string life</option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label for="frequency">String Break Frequency</label>
+        <input type="range" id="frequency" min="1" max="10" value="4">
+        <div class="slider-val" id="frequency-val">Rarely breaks strings (Level 4/10)</div>
+    </div>
+
+    <button onclick="calculateSetup()">Generate Client Recommendation</button>
+
+    <div class="results-card" id="results">
+        <h2>Recommended Setup Details</h2>
+        
+        <div class="result-item">
+            <strong>Recommended Tension:</strong> <span id="rec-tension" style="font-weight: bold; color: #d35400;">--</span>
+        </div>
+        
+        <div class="result-item">
+            <strong>Recommended String Type:</strong> <span id="rec-string">--</span>
+        </div>
+        
+        <div class="result-item">
+            <strong>Suggested Gauge:</strong> <span id="rec-gauge">--</span>
+        </div>
+
+        <div class="result-item">
+            <strong>Stringing Note:</strong> <em id="rec-notes">--</em>
+        </div>
+    </div>
+
+    <a href="scratch.html" class="nav-back">← Back to Main Project Dashboard</a>
+</div>
+
+<script>
+    // Live slider value update
+    const slider = document.getElementById('frequency');
+    const sliderVal = document.getElementById('frequency-val');
+    
+    slider.oninput = function() {
+        if (this.value <= 3) {
+            sliderVal.innerHTML = `Rarely breaks strings (Level ${this.value}/10)`;
+        } else if (this.value <= 7) {
+            sliderVal.innerHTML = `Breaks every few weeks (Level ${this.value}/10)`;
+        } else {
+            sliderVal.innerHTML = `Frequent string breaker! (Level ${this.value}/10)`;
+        }
+    }
+
+    // Dynamic calculator logic
+    function calculateSetup() {
+        const playstyle = document.getElementById('playstyle').value;
+        const skill = document.getElementById('skill').value;
+        const headsize = document.getElementById('headsize').value;
+        const pattern = document.getElementById('stringPattern').value;
+        const breakerLevel = parseInt(document.getElementById('frequency').value);
+
+        // 1. Establish base baseline tension based on frame size
+        let tension = 53; 
+        if (headsize === "95") tension = 50; // Smaller heads need lower tension to keep sweet spot alive
+        if (headsize === "105") tension = 56; // Larger heads need higher tension to control trampoline effect
+
+        // 2. Adjust tension based on player intent
+        if (playstyle === "power") tension -= 3;     // Loose strings = more power
+        if (playstyle === "control") tension += 3;   // Tight strings = more control
+        if (playstyle === "comfort") tension -= 2;   // Lower tension absorbs more impact
+
+        // 3. Pattern adjustments
+        if (pattern === "dense") tension -= 2; // 18x20 is naturally stiffer, drop tension to compensate
+
+        // 4. Figure out String Type and Gauge recommendations based on style and durability needs
+        let stringType = "";
+        let gauge = "";
+        let notes = "";
+
+        if (playstyle === "comfort" || skill === "beginner") {
+            stringType = "Premium Multifilament (e.g., Wilson NXT or Technifibre X-One BiPhase)";
+            gauge = "16 (1.30mm) for balanced playability";
+            notes = "Great choice for crisp feel and arm protection. Avoid polyester here to minimize joint shock.";
+        } else if (breakerLevel >= 7 && skill === "advanced") {
+            stringType = "Co-Polyester (e.g., Luxilon ALU Power or Babolat RPM Blast)";
+            gauge = "15L (1.35mm) or 16 (1.30mm) for heavy durability";
+            notes = "Client breaks strings quickly and has advanced mechanics. Poly will maximize control and spin snapback.";
+        } else if (playstyle === "spin") {
+            stringType = "Shaped Co-Poly / Co-Poly Hybrid";
+            gauge = "17 (1.25mm) for enhanced bite and snap-back";
+            notes = "Gives the ball excellent RPMs. If client complains of stiffness later, try hybridizing with a synthetic gut cross.";
+        } else {
+            // Default excellent all-around hybrid recommendation
+            stringType = "Hybrid Setup (Co-Poly Mains / Synthetic Gut Crosses)";
+            gauge = "16 (1.30mm) Mains / 16 Crosses";
+            notes = "The best of both worlds. Delivers spin control from the mains, tempered by the comfort and budget-friendliness of synthetic gut.";
+        }
+
+        // Output results to UI safely
+        document.getElementById('rec-tension').innerText = `${tension} lbs`;
+        document.getElementById('rec-string').innerText = stringType;
+        document.getElementById('rec-gauge').innerText = gauge;
+        document.getElementById('rec-notes').innerText = notes;
+
+        // Reveal the hidden results section smoothly
+        document.getElementById('results').style.display = 'block';
+    }
+</script>
+
+</body>
+</html>
